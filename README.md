@@ -3,7 +3,7 @@
 > 以電視特別節目的 3D 運鏡與特效，重現西元 208 年的赤壁之戰。
 > 單一 HTML 檔、零 build、零後端。
 
-**Live Demo**: https://yazelin.github.io/red-cliffs-3d/
+**Live Demo**: https://kansasray.github.io/temp-red-cliffs-3d/
 
 ![火燒赤壁](og.png)
 
@@ -129,10 +129,10 @@
 改用弓弩火矢和火船爆燃呈現，還在頁面上註明了這個取捨。
 
 Demo（建議電腦開）：
-https://yazelin.github.io/red-cliffs-3d/
+https://kansasray.github.io/temp-red-cliffs-3d/
 
 原始 prompt、實驗記錄、原始碼都在 repo 裡：
-https://github.com/yazelin/red-cliffs-3d
+https://github.com/kansasray/temp-red-cliffs-3d
 ```
 
 ## License
