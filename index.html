@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>赤壁之戰 208 — 全 3D 戰場重現｜歷史特別節目</title>
-<meta name="description" content="以電視特別節目的 3D 運鏡與特效重現赤壁之戰：九幕時間軸呈現陣型移動、將領、計策發動（連環計、苦肉計、借東風、火攻）、東南風與艦隊狀態，可自動播映或自由視角互動探索。曹操藍、孫權紅、劉備綠，軍旗清楚識別。">
+<meta name="description" content="以電視特別節目的 3D 運鏡與特效重現赤壁之戰：十一幕時間軸呈現陣型移動、將領、計策發動（反間計、草船借箭、連環計、苦肉計、借東風、火攻）、東南風與艦隊狀態，可自動播映或自由視角互動探索。曹操藍、孫權紅、劉備綠，軍旗清楚識別。">
 <meta name="keywords" content="赤壁之戰, 三國, 3D, 視覺化, 互動歷史, 曹操, 周瑜, 黃蓋, 火燒赤壁, Three.js">
 <meta name="author" content="kansasray">
 <meta name="theme-color" content="#0a0d12">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="赤壁之戰 208 — 全 3D 戰場重現">
 <meta property="og:title" content="赤壁之戰 208 — 全 3D 戰場重現">
-<meta property="og:description" content="九幕時間軸重現赤壁之戰：陣型移動、計策發動、東南風與火攻特效，像歷史節目自動播映，也能像遊戲自由操作鏡頭。">
+<meta property="og:description" content="十一幕時間軸重現赤壁之戰：陣型移動、計策發動、東南風與火攻特效，像歷史節目自動播映，也能像遊戲自由操作鏡頭。">
 <meta property="og:url" content="https://kansasray.github.io/temp-red-cliffs-3d/">
 <meta property="og:image" content="https://kansasray.github.io/temp-red-cliffs-3d/og.png">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="赤壁之戰 208 — 全 3D 戰場重現">
-<meta name="twitter:description" content="九幕時間軸重現赤壁之戰：陣型、計策、東風與火攻，可互動可自動播映。">
+<meta name="twitter:description" content="十一幕時間軸重現赤壁之戰：陣型、計策、東風與火攻，可互動可自動播映。">
 <meta name="twitter:image" content="https://kansasray.github.io/temp-red-cliffs-3d/og.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23b3382c'/%3E%3Ctext x='32' y='44' font-size='38' font-family='serif' font-weight='900' fill='%23f3e4cf' text-anchor='middle'%3E赤%3C/text%3E%3C/svg%3E">
 <script type="application/ld+json">
@@ -226,8 +226,46 @@ body:not(.cinema) #deck{bottom:16px}
   color:var(--gold);font-size:13px;letter-spacing:4px;transition:opacity .8s,visibility .8s}
 #loadMsg.off{opacity:0;visibility:hidden}
 
+/* ── 現代怎麼看 knowledge box ────────────────── */
+#sciBox{display:none;border-top:1px dashed var(--line);margin-top:12px;padding-top:10px}
+#sciBox .sci-t{font-size:10.5px;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+#sciBox p{font-size:11.5px;line-height:1.8;color:var(--paper-dim);font-weight:300}
+#intel{max-height:78vh;overflow-y:auto;scrollbar-width:thin}
+
+/* ── help modal ──────────────────────────────── */
+#helpModal{position:fixed;inset:0;z-index:40;background:rgba(5,7,10,.72);display:none;
+  align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+#helpModal.show{display:flex}
+#helpCard{position:relative;max-width:540px;width:92vw;max-height:80vh;overflow-y:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:26px 30px;backdrop-filter:blur(10px)}
+#helpCard h2{font-family:'Noto Serif TC',serif;font-weight:900;font-size:21px;letter-spacing:4px;margin-bottom:14px;color:var(--paper)}
+#helpCard p{font-size:13px;line-height:1.95;color:var(--paper-dim);font-weight:300;margin-bottom:11px}
+#helpCard p b{color:var(--gold);font-weight:600}
+#hmClose{position:absolute;top:12px;right:16px;cursor:pointer;color:var(--paper-dim);font-size:16px}
+#hmClose:hover{color:var(--paper)}
+
+/* ── scale bar ───────────────────────────────── */
+#scaleBar{position:fixed;left:26px;bottom:calc(6.5vh + 22px);z-index:9;display:flex;align-items:center;gap:9px;
+  font-size:10.5px;color:var(--paper-dim);letter-spacing:1px;transition:bottom .9s cubic-bezier(.7,0,.3,1)}
+body:not(.cinema) #scaleBar{bottom:22px}
+#sbLine{display:block;width:80px;height:5px;border-left:1px solid var(--paper-dim);border-right:1px solid var(--paper-dim);position:relative}
+#sbLine::after{content:"";position:absolute;left:0;right:0;top:2px;height:1px;background:var(--paper-dim)}
+
+/* ── mobile rotate hint ──────────────────────── */
+#rotateHint{display:none;position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:30;
+  background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:9px 16px;
+  font-size:12px;letter-spacing:2px;color:var(--paper);pointer-events:none;backdrop-filter:blur(6px)}
+@media (orientation:portrait) and (pointer:coarse){
+  #rotateHint{display:block;animation:rotHint 7s forwards}
+}
+@keyframes rotHint{0%{opacity:0}8%{opacity:1}80%{opacity:1}100%{opacity:0}}
+
+#tlTrack{cursor:pointer}
+#tlTrack::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}
+
 @media (max-width:900px){
   #intel{width:250px;left:12px;padding:13px 15px}
+  #scaleBar{display:none}
   #phTitle{font-size:22px} #phNarr{font-size:12px;min-height:60px}
   #side{display:none}
   .brand h1{font-size:18px;letter-spacing:3px}
@@ -266,6 +304,7 @@ body:not(.cinema) #deck{bottom:16px}
     <div class="pw liu"><div class="row1"><span class="nm">劉備軍</span><span class="num" id="nLiu"></span></div>
       <div class="bar"><i id="bLiu"></i></div><div class="st" id="sLiu"></div></div>
   </div>
+  <div id="sciBox"><div class="sci-t" id="sciT"></div><p id="sciTx"></p></div>
 </div>
 
 <div id="side">
@@ -276,7 +315,7 @@ body:not(.cinema) #deck{bottom:16px}
     <div class="lg"><span class="sw" style="background:var(--liu)"></span>劉備（客軍）</div>
   </div>
   <div id="compass"><div id="needle"></div></div>
-  <div id="hint">拖曳　旋轉視角<br>滾輪　遠近縮放<br>右鍵　平移戰場<br>點擊部隊　查看詳情<br>Ｍ　配樂開關<br>Ｓ　切換樂風</div>
+  <div id="hint">拖曳　旋轉視角<br>滾輪　遠近縮放<br>右鍵　平移戰場<br>點擊部隊　查看詳情<br>←→　上幕／下幕<br>空白鍵　播放暫停<br>Ｍ　配樂開關<br>Ｓ　切換樂風</div>
 </div>
 
 <div id="unitCard">
@@ -290,6 +329,22 @@ body:not(.cinema) #deck{bottom:16px}
 </div>
 
 <div id="finale"><div class="t">天下三分</div><div class="s">赤壁一炬・鼎足之勢成</div></div>
+
+<div id="scaleBar"><i id="sbLine"></i><span id="sbTxt"></span></div>
+<div id="rotateHint">📱 建議橫向觀看</div>
+
+<div id="helpModal">
+  <div id="helpCard">
+    <div id="hmClose">✕</div>
+    <h2>關於本節目</h2>
+    <p><b>兵力</b>　採史家通說：曹軍約二十餘萬（演義號稱八十萬），孫劉聯軍約五萬。各幕戰力條為相對示意。</p>
+    <p><b>地圖</b>　為示意圖：依長江、漢水、烏林、赤壁、夏口、華容道等相對位置重建，非精確比例；比例尺僅供粗略參考。</p>
+    <p><b>史／演義</b>　標注「史」者見於《三國志》等正史；「演義」者出自《三國演義》——群英會蔣幹盜書、草船借箭、苦肉計杖刑、借東風、華容道義釋曹操皆為演義情節。</p>
+    <p><b>東南風</b>　現代氣象解釋：冬至前後冷氣團間歇減弱或東移，南方暖濕氣流北上，長江江面風向可短暫轉為東南，為周瑜、黃蓋所善用。</p>
+    <p><b>華容道</b>　曹操撤退為陸路步走：史載道路泥濘，令羸兵負草填道，人馬蹈藉，死者甚眾。</p>
+    <p><b>史料</b>　《三國志》武帝紀・周瑜傳・先主傳及裴松之注、《資治通鑑》卷六十五、《三國演義》第四十三〜五十回。</p>
+  </div>
+</div>
 
 <div id="deck">
   <div id="tl">
@@ -306,6 +361,7 @@ body:not(.cinema) #deck{bottom:16px}
       <button class="btn mini" id="bReplay">重播</button>
       <button class="btn mini hot" id="bMusic">♪ 配樂 開</button>
       <button class="btn mini" id="bMusStyle">樂風　戰記交響</button>
+      <button class="btn mini" id="bHelp">？ 說明</button>
     </div>
   </div>
 </div>
@@ -367,9 +423,10 @@ const FAC={
 };
 
 /* ════════ renderer / scene ════════ */
+const IS_MOBILE=matchMedia('(pointer:coarse)').matches||innerWidth<820;
 const stage=document.getElementById('stage');
-const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const renderer=new THREE.WebGLRenderer({antialias:!IS_MOBILE,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,IS_MOBILE?1.5:2));
 renderer.setSize(innerWidth,innerHeight);
 stage.appendChild(renderer.domElement);
 const labelRenderer=new CSS2DRenderer({element:document.getElementById('labels')});
@@ -572,7 +629,7 @@ function makeParticles(o){
 }
 const emitters=[];  // {fire,smoke,target,cur}
 function attachFire(parent,scale,yOff=1.5){
-  const fire=makeParticles({n:90,fire:true,scale}),smoke=makeParticles({n:50,fire:false,scale});
+  const fire=makeParticles({n:IS_MOBILE?55:90,fire:true,scale}),smoke=makeParticles({n:IS_MOBILE?32:50,fire:false,scale});
   fire.obj.position.y=yOff;smoke.obj.position.y=yOff+2;
   parent.add(fire.obj,smoke.obj);
   const e={fire,smoke,target:0,cur:0,smokeOnly:false};
@@ -580,7 +637,7 @@ function attachFire(parent,scale,yOff=1.5){
 }
 
 /* ════════ wind streaks ════════ */
-const WIND_N=240;
+const WIND_N=IS_MOBILE?140:240;
 let windTarget=0,windCur=0;
 const windGeo=new THREE.BufferGeometry();
 const windPos=new Float32Array(WIND_N*6);
@@ -590,6 +647,17 @@ windGeo.setAttribute('position',new THREE.BufferAttribute(windPos,3));
 const windMat=new THREE.LineBasicMaterial({color:0x9fd8d8,transparent:true,opacity:0,blending:THREE.AdditiveBlending});
 const windLines=new THREE.LineSegments(windGeo,windMat);windLines.frustumCulled=false;scene.add(windLines);
 const WDIR=V3(-0.78,0,-0.63).normalize();    // 東南風 → 吹向西北
+
+/* ════════ rain（華容道・大雨泥濘）════════ */
+const RAIN_N=IS_MOBILE?160:300;
+let rainTarget=0,rainCur=0;
+const rainGeo=new THREE.BufferGeometry();
+const rainPos=new Float32Array(RAIN_N*6);
+const rainDat=[];
+for(let i=0;i<RAIN_N;i++){rainDat.push({x:(Math.random()-.5)*520,y:Math.random()*110,z:(Math.random()-.5)*360,v:75+Math.random()*45});}
+rainGeo.setAttribute('position',new THREE.BufferAttribute(rainPos,3));
+const rainMat=new THREE.LineBasicMaterial({color:0x8fa3b8,transparent:true,opacity:0});
+const rainLines=new THREE.LineSegments(rainGeo,rainMat);rainLines.frustumCulled=false;scene.add(rainLines);
 
 /* ════════ arrows (volleys) ════════ */
 function arrowPool(fire){
@@ -851,6 +919,24 @@ locLabel('漢水',158,-120,'water');
 const campWulin=makeCamp('cao',-45,-46);
 const campChibi=makeCamp('sun',36,44);
 
+/* 七星壇（南屏山・借東風祭壇）*/
+let altarTarget=0,altarCur=0,altarBeam=null;
+{
+  const ax=72,az=60,ah=Math.max(ground(72,60),.5);
+  const g=new THREE.Group();
+  const m=new THREE.MeshLambertMaterial({color:0x6b6354});
+  let y=0;
+  [[8.5,2.4],[6,2.2],[3.6,2]].forEach(t=>{
+    const c=new THREE.Mesh(new THREE.CylinderGeometry(t[0],t[0]+.8,t[1],9),m);
+    c.position.y=y+t[1]/2;y+=t[1];g.add(c);
+  });
+  altarBeam=new THREE.Mesh(new THREE.CylinderGeometry(1.1,2.6,70,8,1,true),
+    new THREE.MeshBasicMaterial({color:0x9fd8ff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));
+  altarBeam.position.y=y+35;g.add(altarBeam);
+  g.position.set(ax,ah,az);scene.add(g);
+  locLabel('南屏山・七星壇',72,66);
+}
+
 /* ════════ units ════════ */
 const U={};
 U.caoMain=new Army('caoMain','cao',60);U.caoMain.setLabel('曹操本軍','曹操・張遼・徐晃・于禁');
@@ -860,6 +946,7 @@ U.liuArmy=new Army('liuArmy','liu',34);U.liuArmy.setLabel('劉備軍','劉備・
 U.liuFleet=new Fleet('liuFleet','liu',5);U.liuFleet.setLabel('江夏水軍','劉琦・關羽');
 U.sunFleet=new Fleet('sunFleet','sun',14);U.sunFleet.setLabel('周瑜水師','周瑜・程普・魯肅');
 U.hgFleet=new Fleet('hgFleet','sun',6,{fireShip:true});U.hgFleet.setLabel('黃蓋先鋒','黃蓋・蒙衝鬥艦十艘');
+U.strawFleet=new Fleet('strawFleet','liu',8,{fireShip:true});U.strawFleet.setLabel('草船','諸葛亮・魯肅');
 buildChains(U.caoNavy);
 
 const UNIT_INFO={
@@ -870,6 +957,7 @@ const UNIT_INFO={
   liuFleet:['江夏水軍','劉琦所部江夏戰士萬人，屯夏口、樊口。'],
   sunFleet:['江東精銳','周瑜、程普領三萬水師溯江而上，與曹軍遇於赤壁。'],
   hgFleet:['火攻先鋒','黃蓋取蒙衝鬥艦十艘，實以薪草膏油，外以帷幕偽降。'],
+  strawFleet:['草船借箭','演義：孔明以二十艘草船乘大霧逼曹軍水寨，受箭十餘萬而還。史實原型為孫權濡須口乘舟受箭（裴注引《魏略》）。'],
 };
 
 /* initial placement */
@@ -881,6 +969,7 @@ function initPlace(){
   U.liuFleet.place(160,-8);U.liuFleet.setVisible(true);
   U.sunFleet.place(258,-6);U.sunFleet.setVisible(true);
   U.hgFleet.place(52,22);U.hgFleet.setVisible(false);
+  U.strawFleet.place(162,-8);U.strawFleet.setVisible(false);
   campWulin.visible=false;campChibi.visible=false;chainsOn=false;
 }
 
@@ -890,6 +979,7 @@ const ENV={
   cold:   {top:0x3a506e,bot:0x8d9189,fog:0x33414f,fd:.0019,sc:0xe8e4d8,si:1.2,amb:.8,glow:0},
   dusk:   {top:0x2c3a55,bot:0xb07848,fog:0x3a3a48,fd:.0021,sc:0xffb070,si:1.0,amb:.6,glow:0},
   night:  {top:0x0d1524,bot:0x27313e,fog:0x131a26,fd:.0024,sc:0x8fa8d0,si:.45,amb:.4,glow:0},
+  mist:   {top:0x4a5560,bot:0x848d94,fog:0x6b757e,fd:.011,sc:0xaebccb,si:.4,amb:.75,glow:0},
   inferno:{top:0x140e16,bot:0x57281a,fog:0x241318,fd:.0026,sc:0x7088b0,si:.35,amb:.42,glow:1},
   dawn:   {top:0x37455c,bot:0x9d8d76,fog:0x3d4350,fd:.002,sc:0xf0d8b8,si:.9,amb:.7,glow:.12},
 };
@@ -941,18 +1031,45 @@ const PHASES=[
        sunFleet:{path:[[60,10],[30,13]],dur:8},campWulin:{visible:true},campChibi:{visible:true}},
   march:[{pts:[[-225,-2],[-140,14],[-50,-10]],fac:'cao'},{pts:[[112,8],[60,10],[34,13]],fac:'sun'}],
   fx:[{at:8,fn:()=>fireVolley([18,10],[-20,-4],50,false)},{at:10,fn:()=>fireVolley([-26,-6],[12,9],50,false)}],
-  events:[{at:9.5,x:-12,z:0,t:'初戰不利・曹軍退駐北岸',tag:'史'},{at:13.5,x:-45,z:-46,t:'軍中大疫',tag:'史'}]},
+  events:[{at:9.5,x:-12,z:0,t:'初戰不利・曹軍退駐北岸',tag:'史'},{at:13.5,x:-45,z:-46,t:'軍中大疫',tag:'史'}],
+  sci:{t:'🔍 現代怎麼看：軍中大疫',tx:'「於是大疫，吏士多死者。」現代學者多推測為血吸蟲病（長江流域釘螺孳生）或斑疹傷寒：北軍不習水土、冬季群聚行軍，正是疫病溫床。瘟疫對戰局的影響，可能不亞於那把火。'}},
 
-{ key:'第四幕',era:'冬十一月',title:'鐵索連環',dur:15,env:'cold',
+{ key:'第四幕',era:'冬十一月',title:'群英會・蔣幹盜書',dur:14,env:'dusk',
+  narr:'蔣幹自請過江，欲說周瑜來降。周瑜設群英會宴之，佯醉留幹同榻，故置偽書於案——書中偽稱水軍都督蔡瑁、張允欲獻曹操首級。幹盜書而歸，曹操怒斬二人，自毀水軍長城。',
+  power:{cao:['約 200,000',90,'誤斬都督・水軍失帥'],sun:['30,000',15,'反間計成'],liu:['約 20,000',10,'靜觀其變']},
+  shots:[{kind:'orbit',c:[36,0,44],r:52,h:20,a0:3.6,a1:5.0,dur:7},
+         {kind:'line',a:[-100,44,34],b:[-58,26,12],look:[-45,2,-40],dur:7}],
+  strat:{at:2,name:'反間計',by:'周瑜 將計就計',tag:'演義',
+    desc:'「群英會」全段為演義虛構：正史中蔡瑁、張允並未被斬。羅貫中以此解釋曹軍水戰之失——主帥既誅，新督于禁、毛玠不諳水軍。'},
+  events:[{at:5,x:36,z:44,t:'群英會・蔣幹盜書',tag:'演義'},{at:9.5,x:-45,z:-46,t:'曹操怒斬蔡瑁・張允',tag:'演義'},
+          {at:12,x:-42,z:-11,t:'水軍易帥・軍心浮動',tag:'演義'}],
+  sci:{t:'🔍 現代怎麼看',tx:'《三國志》無蔣幹盜書事；裴注引《江表傳》僅載蔣幹見周瑜「雅量高致」而還，且在赤壁戰後。蔡瑁、張允被斬亦不見正史——這是演義為火攻鋪路的精彩虛構。'}},
+
+{ key:'第五幕',era:'冬十一月・霧夜',title:'草船借箭',dur:16,env:'mist',
+  narr:'大霧漫江，對面不相見。孔明與魯肅以草船二十艘擂鼓吶喊、逼近曹軍水寨；曹操疑霧中有伏，下令弓弩亂發。日高霧散，草船兩舷受箭十餘萬而還——「謝丞相箭！」',
+  power:{cao:['約 200,000',90,'霧鎖江面・按兵不出'],sun:['30,000',15,'得箭十餘萬'],liu:['約 20,000',10,'孔明立軍令狀']},
+  shots:[{kind:'follow',unit:'strawFleet',off:[26,16,34],dur:9},
+         {kind:'orbit',c:[-28,0,-8],r:62,h:24,a0:.4,a1:1.6,dur:7}],
+  set:{strawFleet:{visible:true,path:[[60,2],[2,-2],[-18,-6]],dur:8}},
+  strat:{at:2,name:'草船借箭',by:'諸葛亮 霧夜借箭',tag:'演義',
+    desc:'「三日之內，造箭十萬」——周瑜以軍令狀相逼，孔明只取草船二十、軍士六百，借天時還之以箭。'},
+  fx:[{at:8,fn:()=>fireVolley([-42,-11],[-14,-5],80,false)},
+      {at:10.5,fn:()=>fireVolley([-42,-8],[-16,-3],80,false)},
+      {at:12.5,fn:()=>{U.strawFleet.moveTo([[40,0],[120,-6],[162,-8]],5);fireVolley([-42,-14],[-12,-6],60,false);}}],
+  events:[{at:4,x:-8,z:-4,t:'大霧漫江・草船擂鼓',tag:'演義'},{at:11,x:-20,z:-6,t:'弓弩亂發・受箭十餘萬',tag:'演義'}],
+  sci:{t:'🔍 現代怎麼看',tx:'史實原型在五年後：建安十八年濡須之戰，孫權乘大船觀曹營，曹操下令亂箭射之，「箭著其船，船偏重將覆」，孫權令調頭以另一面受箭，平衡而還（裴注引《魏略》）。演義把這一幕搬到赤壁、主角換成孔明。'}},
+
+{ key:'第六幕',era:'冬十一月',title:'鐵索連環',dur:15,env:'cold',
   narr:'北兵不習水戰，舟船顛簸。曹操下令以鐵環將艦船首尾相連，上鋪闊板，人馬如履平地——演義中，這正是龐統所獻的連環計。',
   power:{cao:['約 200,000',90,'艦船連鎖・穩如平地'],sun:['30,000',15,'隔江對峙・謀求破敵'],liu:['約 20,000',10,'聯營南岸']},
   shots:[{kind:'orbit',c:[-42,0,-11],r:74,h:34,a0:2.7,a1:4.3,dur:15}],
-  set:{caoNavy:{formation:'tight'},chains:true},
+  set:{caoNavy:{formation:'tight'},chains:true,strawFleet:{visible:false}},
   strat:{at:2,name:'連環計',by:'龐統 獻計 曹操',tag:'演義',
     desc:'正史載曹操自令船艦相連以減顛簸；演義中為龐統詐獻之計——船鎖則穩，穩則可火焚其全軍。'},
-  events:[{at:7,x:-42,z:-11,t:'戰船首尾相連・人馬如履平地',tag:'史'}]},
+  events:[{at:7,x:-42,z:-11,t:'戰船首尾相連・人馬如履平地',tag:'史'}],
+  sci:{t:'🔍 現代怎麼看',tx:'《三國志・周瑜傳》：「操軍方連船艦，首尾相接。」連舟是曹操自己的決定，目的是讓不習水戰的北軍站穩；龐統獻計為演義添筆。工程上合理的決策，遇上東南風就成了致命弱點。'}},
 
-{ key:'第五幕',era:'冬十一月',title:'苦肉計・詐降書',dur:15,env:'dusk',
+{ key:'第七幕',era:'冬十一月',title:'苦肉計・詐降書',dur:15,env:'dusk',
   narr:'黃蓋望曹軍船陣：「寇眾我寡，難與持久；然觀其船艦首尾相接，可燒而走也。」遂密遣人致書曹操偽稱欲降。演義更添周瑜杖打黃蓋的苦肉一幕。',
   power:{cao:['約 200,000',88,'得降書・不疑有詐'],sun:['30,000',15,'火攻之策已定'],liu:['約 20,000',10,'整軍備戰']},
   shots:[{kind:'line',a:[100,42,108],b:[58,18,78],look:[40,2,16],dur:7.5},
@@ -962,23 +1079,24 @@ const PHASES=[
     desc:'「周瑜打黃蓋，一個願打、一個願挨。」正史無杖刑，但黃蓋詐降確為史實——詐降書入曹營，火攻的引信已經點上。'},
   events:[{at:7.5,x:30,z:13,t:'黃蓋密遣詐降書',tag:'史'},{at:11,x:46,z:22,t:'蒙衝鬥艦實以薪草膏油',tag:'史'}]},
 
-{ key:'第六幕',era:'冬十一月・冬至前後',title:'東風驟起',dur:14,env:'night',
+{ key:'第八幕',era:'冬十一月・冬至前後',title:'東風驟起',dur:14,env:'night',
   narr:'是夜，東南風急。演義中孔明築七星壇借來三日三夜東南大風；而長江冬至前後本有東南風起之候——天時，站到了聯軍一邊。',
   power:{cao:['約 200,000',88,'夜泊烏林・渾然不覺'],sun:['30,000',15,'萬事俱備・只欠東風'],liu:['約 20,000',10,'枕戈待旦']},
   shots:[{kind:'line',a:[130,52,150],b:[56,26,100],look:[-30,6,-4],dur:14}],
-  set:{wind:true},
+  set:{wind:true,altar:true},
   strat:{at:3,name:'借東風',by:'諸葛亮 七星壇祭風',tag:'演義',
     desc:'「欲破曹公，宜用火攻；萬事俱備，只欠東風。」史家多認為乃冬至前後江上東南風之天候，為周瑜、黃蓋所善用。'},
-  events:[{at:7,x:60,z:30,t:'東南風急',tag:'史'}]},
+  events:[{at:7,x:60,z:30,t:'東南風急',tag:'史'},{at:4,x:72,z:62,t:'孔明登壇祭風',tag:'演義'}],
+  sci:{t:'🔍 現代怎麼看：東南風從何而來',tx:'長江中游冬季盛行西北風，但冷氣團間歇減弱或東移出海時，南方暖濕氣流北上，江面風向可短暫轉為東南——通常只維持一兩天。熟悉江上水文的周瑜、黃蓋等的就是這個窗口；演義把氣象學變成了法術。'}},
 
-{ key:'第七幕',era:'冬十一月',title:'火燒赤壁',dur:26,env:'inferno',
+{ key:'第九幕',era:'冬十一月',title:'火燒赤壁',dur:26,env:'inferno',
   narr:'黃蓋以蒙衝鬥艦十艘載薪草膏油，建旌旗龍幡偽降，中江舉帆，餘船以次俱進。去北軍二里餘，同時發火，火烈風猛，船往如箭，盡燒北船，延及岸上營落。頃之，煙炎張天。',
   power:{cao:['折損過半・人馬燒溺死者甚眾',45,'水陸大潰'],sun:['30,000',15,'雷鼓大進・全線總攻'],liu:['約 20,000',10,'水陸並進・合圍曹軍']},
   shots:[{kind:'follow',unit:'hgFleet',off:[20,13,30],dur:11},
          {kind:'orbit',c:[-42,4,-11],r:88,h:42,a0:.5,a1:2.3,dur:9},
          {kind:'line',a:[-150,66,56],b:[-86,88,86],look:[-45,6,-26],dur:6}],
   set:{hgFleet:{path:[[14,8],[-16,-2],[-38,-9]],dur:10},sunFleet:{path:[[-2,4]],dur:16},
-       liuFleet:{path:[[60,4],[16,6]],dur:16},wind:true},
+       liuFleet:{path:[[60,4],[16,6]],dur:16},wind:true,altar:false},
   scrubSet:{fleetCao:'burn',campFire:true},
   strat:{at:1,name:'火攻',by:'周瑜・黃蓋 既定方略',tag:'史'  ,
     desc:'「操軍船艦首尾相接，可燒而走也。」十艘火船乘東南風直衝曹軍水寨，火烈風猛，煙炎張天。'},
@@ -988,27 +1106,29 @@ const PHASES=[
       {at:14.5,fn:()=>fireVolley([-12,2],[-50,-16],60,true)},
       {at:17,fn:()=>fireVolley([-30,-2],[-58,-20],50,true)}],
   events:[{at:10.5,x:-38,z:-9,t:'火船衝陣・盡燒北船',tag:'史'},{at:13.5,x:-45,z:-46,t:'延燒岸上營落・煙炎張天',tag:'史'},
-          {at:18,x:-10,z:2,t:'聯軍雷鼓大進',tag:'史'}]},
+          {at:18,x:-10,z:2,t:'聯軍雷鼓大進',tag:'史'}],
+  sci:{t:'🔍 現代怎麼看：詐降書才是勝負手',tx:'火攻成立的前提是火船能貼近到「去北軍二里餘」才舉火——若無黃蓋詐降在先，蒙衝鬥艦逼近水寨早被攔截。火攻不是奇蹟：疫病削弱、連環自縛、詐降開門、東風助勢，環環相扣。'}},
 
-{ key:'第八幕',era:'冬十一月',title:'敗走華容',dur:19,env:'dawn',
+{ key:'第十幕',era:'冬十一月',title:'敗走華容',dur:19,env:'dawn',
   narr:'曹操引殘軍自華容道步走，遇泥濘，道不通，令羸兵負草填之，騎乃得過——羸兵為人馬所蹈藉，死者甚眾。演義在此安排了關雲長義釋曹操的千古一幕。',
   power:{cao:['殘部北撤',28,'羸兵填道・死者甚眾'],sun:['30,000',15,'水陸追擊'],liu:['約 20,000',10,'南岸並進・追至南郡']},
   shots:[{kind:'follow',unit:'caoMain',off:[-36,40,42],dur:12.5},
          {kind:'line',a:[-210,80,0],b:[-258,110,-50],look:[-240,0,-36],dur:6.5}],
   set:{caoMain:{path:[[-80,-66],[-110,-84],[-170,-66],[-240,-36]],dur:13},
-       fleetCao:'wreck',fleetHg:'wreck',chains:false,wind:false,campSmoke:true,
+       fleetCao:'wreck',fleetHg:'wreck',chains:false,wind:false,campSmoke:true,rain:true,
        sunFleet:{path:[[-34,-6]],dur:10},liuArmy:{path:[[120,42],[60,42],[36,44]],dur:13},caoRen:{visible:true}},
   march:[{pts:[[-50,-50],[-110,-84],[-175,-64],[-238,-40]],fac:'cao'},
          {pts:[[20,12],[-24,-4]],fac:'sun'},{pts:[[185,30],[110,38],[40,44]],fac:'liu'}],
   events:[{at:5,x:-110,z:-80,t:'華容泥濘・羸兵填道',tag:'史'},{at:9,x:-128,z:-76,t:'關雲長義釋曹操',tag:'演義'},
-          {at:14,x:-240,z:-24,t:'曹仁留守江陵',tag:'史'}]},
+          {at:14,x:-240,z:-24,t:'曹仁留守江陵',tag:'史'}],
+  sci:{t:'🔍 現代怎麼看',tx:'《山陽公載記》：曹操自華容道陸路步走，「遇泥濘，道不通，天又大風」，令羸兵負草填道，騎乃得過——羸兵為人馬所蹈藉，陷泥中死者甚眾。關羽攔路放行則是演義的千古名場面。'}},
 
 { key:'終幕',era:'建安十三年末〜十四年',title:'天下三分',dur:21,env:'day',
   narr:'曹操北還，留曹仁守江陵。周瑜攻江陵年餘而拔之；劉備南收武陵、長沙、桂陽、零陵四郡，遂有立足之地。赤壁一炬，奠定三國鼎立之勢。',
   power:{cao:['退守北方',28,'曹仁拒守江陵'],sun:['30,000',15,'周瑜進圍江陵'],liu:['擴編中',16,'南取荊州四郡']},
   shots:[{kind:'line',a:[-20,90,190],b:[40,280,360],look:[0,0,-20],dur:21}],
   set:{caoMain:{path:[[-242,-100],[-250,-150]],dur:9},sunFleet:{path:[[-120,12],[-200,2]],dur:13},
-       liuArmy:{path:[[80,80],[60,130]],dur:13},hgFleet:{visible:false}},
+       liuArmy:{path:[[80,80],[60,130]],dur:13},hgFleet:{visible:false},rain:false},
   march:[{pts:[[-240,-40],[-248,-140]],fac:'cao'},{pts:[[-60,-6],[-180,4]],fac:'sun'},
          {pts:[[40,46],[70,90],[62,128]],fac:'liu'}],
   events:[{at:4,x:-240,z:-36,t:'周瑜攻江陵',tag:'史'},{at:8,x:60,z:120,t:'劉備收荊南四郡',tag:'史'},
@@ -1048,6 +1168,8 @@ function applySet(s,inst){
     const d=s[id];
     if(id==='chains'){chainsOn=d;continue;}
     if(id==='wind'){windTarget=d?1:0;continue;}
+    if(id==='rain'){rainTarget=d?1:0;continue;}
+    if(id==='altar'){altarTarget=d?1:0;continue;}
     if(id==='fleetCao'){U.caoNavy.setState(d,inst);continue;}
     if(id==='fleetHg'){U.hgFleet.setState(d,inst);continue;}
     if(id==='campWulin'){campWulin.visible=d.visible;continue;}
@@ -1075,7 +1197,7 @@ function gotoPhase(i,viaScrub=false){
     U.hgFleet.ships.forEach(s=>{s.burn=0;if(s.fire){s.fire.target=0;s.fire.smokeOnly=false;}});
     U.caoNavy.state='normal';U.caoNavy.setFormation('loose');
     campWulinFire.target=0;campWulinFire.smokeOnly=false;
-    windTarget=0;chainsOn=false;
+    windTarget=0;chainsOn=false;rainTarget=0;altarTarget=0;
     initPlace();
     for(let k=0;k<i;k++){applySet(PHASES[k].set,true);applySet(PHASES[k].scrubSet,true);}
   }
@@ -1101,6 +1223,9 @@ function gotoPhase(i,viaScrub=false){
   document.getElementById('nCao').textContent=pw.cao[0];document.getElementById('bCao').style.width=pw.cao[1]+'%';document.getElementById('sCao').textContent='狀態　'+pw.cao[2];
   document.getElementById('nSun').textContent=pw.sun[0];document.getElementById('bSun').style.width=pw.sun[1]+'%';document.getElementById('sSun').textContent='狀態　'+pw.sun[2];
   document.getElementById('nLiu').textContent=pw.liu[0];document.getElementById('bLiu').style.width=pw.liu[1]+'%';document.getElementById('sLiu').textContent='狀態　'+pw.liu[2];
+  const sb=document.getElementById('sciBox');
+  if(p.sci){document.getElementById('sciT').textContent=p.sci.t;document.getElementById('sciTx').textContent=p.sci.tx;sb.style.display='block';}
+  else sb.style.display='none';
   document.querySelectorAll('.node').forEach((n,k)=>n.classList.toggle('on',k===i));
 }
 
@@ -1167,6 +1292,21 @@ function setCinema(v){
 bCam.onclick=()=>setCinema(!cinema);
 renderer.domElement.addEventListener('pointerdown',()=>{if(cinema)setCinema(false);});
 document.getElementById('bReplay').onclick=()=>{gotoPhase(0,true);if(!playing)togglePlay();setCinema(true);};
+
+/* timeline click-to-seek（節點之外的軌道也可點）*/
+document.getElementById('tlTrack').addEventListener('click',e=>{
+  if(e.target.closest('.node'))return;
+  const r=e.currentTarget.getBoundingClientRect();
+  const tgt=clamp((e.clientX-r.left)/r.width,0,1)*durTotal;
+  let a2=0;
+  for(let i=0;i<PHASES.length;i++){a2+=PHASES[i].dur;if(tgt<a2){gotoPhase(i,true);if(!playing)togglePlay();break;}}
+});
+
+/* help modal */
+const helpModal=document.getElementById('helpModal');
+document.getElementById('bHelp').onclick=()=>helpModal.classList.add('show');
+document.getElementById('hmClose').onclick=()=>helpModal.classList.remove('show');
+helpModal.addEventListener('click',e=>{if(e.target===helpModal)helpModal.classList.remove('show');});
 
 /* unit click */
 const ray=new THREE.Raycaster();const mouse=new THREE.Vector2();
@@ -1504,8 +1644,8 @@ const Music=(()=>{
   };
 })();
 /* 各幕配樂強度（影響太鼓密度、音量與微速）*/
-const MUSIC_INT=[.35,.4,.5,.55,.6,.7,1,.85,.45];
-let musicWanted=true;
+const MUSIC_INT=[.35,.4,.5,.45,.5,.55,.6,.7,1,.85,.45];
+let musicWanted=localStorage.getItem('rc3d-music')!=='0';
 const bMusicEl=document.getElementById('bMusic'),bMusStyleEl=document.getElementById('bMusStyle');
 function musicUI(){
   bMusicEl.textContent=musicWanted?'♪ 配樂 開':'♪ 配樂 關';
@@ -1513,11 +1653,20 @@ function musicUI(){
   bMusStyleEl.textContent='樂風　'+Music.styleName;
   bMusStyleEl.style.opacity=musicWanted?1:.45;
 }
-bMusicEl.onclick=()=>{musicWanted=!musicWanted;if(musicWanted)Music.start();else Music.stop();musicUI();};
-bMusStyleEl.onclick=()=>{Music.nextStyle();musicUI();};
+bMusicEl.onclick=()=>{musicWanted=!musicWanted;if(musicWanted)Music.start();else Music.stop();musicUI();
+  try{localStorage.setItem('rc3d-music',musicWanted?'1':'0');}catch(_){}};
+let styleSaved=0;
+bMusStyleEl.onclick=()=>{Music.nextStyle();styleSaved=(styleSaved+1)%3;musicUI();
+  try{localStorage.setItem('rc3d-style',styleSaved);}catch(_){}};
+try{const sv=+(localStorage.getItem('rc3d-style')||0);for(let i=0;i<sv&&i<3;i++){Music.nextStyle();styleSaved++;}}catch(_){}
 addEventListener('keydown',e=>{
   if(e.key==='m'||e.key==='M')bMusicEl.onclick();
   else if(e.key==='s'||e.key==='S')bMusStyleEl.onclick();
+  else if(e.key==='Escape')helpModal.classList.remove('show');
+  else if(phase<0)return;
+  else if(e.key==='ArrowLeft')document.getElementById('bPrev').onclick();
+  else if(e.key==='ArrowRight')document.getElementById('bNext').onclick();
+  else if(e.key===' '){e.preventDefault();togglePlay();}
 });
 musicUI();
 setTimeout(()=>{try{Music.preload();}catch(e){}},700); /* 預載真實樂器樣本（gesture 前 decode 可行）*/
@@ -1588,6 +1737,22 @@ function loop(){
     }
     windGeo.attributes.position.needsUpdate=true;
   }
+  // rain
+  rainCur=lerp(rainCur,rainTarget,dt*.9);
+  rainMat.opacity=rainCur*.45;
+  if(rainCur>0.02){
+    for(let i=0;i<RAIN_N;i++){
+      const w=rainDat[i];
+      w.y-=w.v*rdt;
+      if(w.y<0){w.y=85+Math.random()*30;w.x=(Math.random()-.5)*520;w.z=(Math.random()-.5)*360;}
+      rainPos[i*6]=w.x;rainPos[i*6+1]=w.y;rainPos[i*6+2]=w.z;
+      rainPos[i*6+3]=w.x+.9;rainPos[i*6+4]=w.y+3.6;rainPos[i*6+5]=w.z+.5;
+    }
+    rainGeo.attributes.position.needsUpdate=true;
+  }
+  // altar beam
+  altarCur=lerp(altarCur,altarTarget,dt*.7);
+  if(altarBeam)altarBeam.material.opacity=altarCur*(.22+.09*Math.sin(T*3));
   // volleys
   updateVolleys();
   // water
@@ -1600,10 +1765,20 @@ function loop(){
   // compass
   _v1.set(0,0,-1).applyQuaternion(camera.quaternion);
   document.getElementById('needle').style.transform='rotate('+Math.atan2(_v1.x,-_v1.z)+'rad)';
+  // scale bar（地圖為示意，約 0.8 公里／單位）
+  frameN++;
+  if(frameN%12===0){
+    const dist=camera.position.distanceTo(cinema?camLook:controls.target);
+    const km=2*dist*Math.tan(camera.fov*Math.PI/360)/innerHeight*80*0.8;
+    document.getElementById('sbTxt').textContent='約 '+(km<10?km.toFixed(1):Math.round(km))+' 公里';
+  }
+  // 慢幀偵測：持續掉幀則降解析度
+  if(rdt>.09&&++slowN===40)renderer.setPixelRatio(1);
   renderer.render(scene,camera);
   labelRenderer.render(scene,camera);
   if(!started){started=true;document.getElementById('loadMsg').classList.add('off');}
 }
+let frameN=0,slowN=0;
 addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
   renderer.setSize(innerWidth,innerHeight);labelRenderer.setSize(innerWidth,innerHeight);
